@@ -1,0 +1,2 @@
+127.0.0.1 - - [25/Aug/2020:14:54:03 +0900] "GET / HTTP/1.1" 404 807
+0:0:0:0:0:0:0:1 - - [25/Aug/2020:14:54:04 +0900] "GET /biz/WEB-INF/classes/polymorphism/SamsungTV.java HTTP/1.1" 404 721

@@ -1,0 +1,17 @@
+package org.zerock.domain;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import jdk.internal.org.jline.utils.Log;
+import lombok.Data;
+
+@Data
+public class SampleDTOList {
+	private List<SampleDTO> list;
+	
+	public SampleDTOList() {
+		Log.info("객체 생성");
+		list = new ArrayList<SampleDTO>();
+	}
+}

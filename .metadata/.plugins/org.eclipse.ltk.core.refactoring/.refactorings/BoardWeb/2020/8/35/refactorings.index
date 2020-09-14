@@ -1,0 +1,15 @@
+1598274693129	Delete element
+1598274713188	Delete elements
+1598336884987	Extract interface 'Speaker'
+1598417065356	Delete element
+1598417107056	Extract superclass 'BoardService'
+1598417132740	Delete element
+1598417482086	Extract interface 'BoardService'
+1598417523830	Move compilation unit
+1598420816458	Extract interface 'UserService'
+1598420825410	Move compilation unit
+1598496347326	Copy compilation unit
+1598502616976	Copy compilation unit
+1598502873233	Copy compilation unit
+1598506240591	Rename type 'AfterAdvice'
+1598582727524	Rename type 'Log4jAdvice'

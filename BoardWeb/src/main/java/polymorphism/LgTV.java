@@ -1,0 +1,39 @@
+package polymorphism;
+
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
+@Component("tv")
+public class LgTV implements TV{
+	
+	
+	@Autowired
+	private Speaker speaker;
+	
+	public LgTV() {
+		System.out.println("¿¤Áö °´Ã¼ »ý¼º");
+	}
+	
+	@Override
+	public void powerOn() {
+		System.out.println("¿¤Áö Àü¿ø ÄÒ´Ù");
+	}
+
+	@Override
+	public void powerOff() {
+		System.out.println("¿¤Áö Àü¿ø ²ö´Ù");
+	}
+
+	@Override
+	public void volumeUp() {
+		speaker.volumeUp();
+	}
+
+	@Override
+	public void volumeDown() {
+		speaker.volumeDown();
+	}
+}
