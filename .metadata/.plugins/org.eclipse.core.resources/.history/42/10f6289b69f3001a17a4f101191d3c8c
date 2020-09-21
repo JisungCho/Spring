@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN">
-
-<mapper namespace="org.zerock.mapper.TimeMapper">
-
-<select resultType="string" id="getTime2">SELECT sysdate FROM dual </select>
-
-</mapper>
