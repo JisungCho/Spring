@@ -8,14 +8,14 @@
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="get"/>
+			<item value="lom"/>
+			<item value="servl"/>
 			<item value="move"/>
 			<item value="sql"/>
 			<item value="62"/>
 			<item value="servlet"/>
 			<item value="pre"/>
-			<item value="modfi"/>
-			<item value="modal"/>
-			<item value="/table"/>
 		</list>
 		<list key="replacehistory">
 		</list>
