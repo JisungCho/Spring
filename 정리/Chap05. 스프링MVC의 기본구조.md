@@ -43,10 +43,9 @@
   - servlet-contex.xml
   servlet에서 보듯이 요청과 관련된 객체를 정의합니다.
     url과 관련된 controller나, @(어노테이션), ViewResolver, Interceptor, MultipartResolver 등의 설정을 해줍니다.
-- root-contex.xml
-    servlet-context.xml 과는 반대로 view와 관련되지 않은 객체를 정의합니다.
-    따라서 Service, Repository(DAO), DB등 비즈니스 로직과 관련된 설정을 해줍니다.
-  아래 사진을 참고하시면 좋을 것 같습니다.
+  - root-contex.xml
+      servlet-context.xml 과는 반대로 view와 관련되지 않은 객체를 정의합니다.
+      따라서 Service, Repository(DAO), DB등 비즈니스 로직과 관련된 설정을 해줍니다..
   
 - root-context.xml , servlet-context.xml
 
