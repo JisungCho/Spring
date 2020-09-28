@@ -57,12 +57,12 @@
 - method속성 : GET방식 / Post방식 
 
   ```java
-  	@RequestMapping(value = "/basic" , method = {RequestMethod.GET , RequestMethod.POST})
-  	public void basic() {
+  	@RequestMapping(value = "/basic" , method = {RequestMethod.GET , RequestMethod.POST}) // POST , GET 방식 모두 허용
+  	public void basic() { 
   		log.info("basic...........");
   	}
   	
-  	@GetMapping("/basicOnlyGet")
+  	@GetMapping("/basicOnlyGet") //GET방식만 허용
   	public void basicGet2() {
   		log.info("basic get only get...........");
   	}
@@ -78,7 +78,7 @@
     import lombok.Data;
     
     @Data
-    public class SampleDTO {
+    public class SampleDTO { 
     	private String name;
     	private int age;
     }
@@ -112,7 +112,7 @@
     
         @GetMapping("/ex01")
     
-        public String ex01(SampleDTO dto) {
+        public String ex01(SampleDTO dto) { //setName() , setAge()수행됨
     
             log.info(" "+dto);
     
@@ -131,12 +131,12 @@
 
    - ```java
      	@GetMapping("/ex02")
-     	public String ex02(@RequestParam("name") String name, @RequestParam("age") int age) {
-     		
-     		log.info("name : "+name);
-     		log.info("age : "+age);
-     		return "ex02";
-     	}
+       	public String ex02(@RequestParam("name") String name, @RequestParam("age") int age) {
+       		
+       		log.info("name : "+name);
+       		log.info("age : "+age);
+       		return "ex02";
+       	}
      ```
 
 2. 리스트, 배열 처리
@@ -145,16 +145,16 @@
 
    - ```java
      	@GetMapping("/ex02List")
-     	public String ex02List(@RequestParam("ids") ArrayList<String> ids) {
-     		log.info("ids : "+ids);
-     		return "ex02List";
-     	}
-     	 
-     	@GetMapping("/ex02Array")
-     	public String ex02Array(@RequestParam("ids") String[] ids) {
-     		log.info("array ids : "+ids);
-     		return "ex02Array";
-     	}
+       	public String ex02List(@RequestParam("ids") ArrayList<String> ids) {
+       		log.info("ids : "+ids);
+       		return "ex02List";
+       	}
+       	 
+       	@GetMapping("/ex02Array")
+       	public String ex02Array(@RequestParam("ids") String[] ids) {
+       		log.info("array ids : "+ids);
+       		return "ex02Array";
+       	}
      ```
 
 3. 객체 리스트
@@ -262,7 +262,7 @@
 
    - 강제로 전달받은 파라미터를 Model에 담아서 전달하도록 할 떄 필요한 어노테이션이고, 타입에 관계없이 Model에 담겨서 전달
 
-     ```
+     ```java
      	@GetMapping("/ex04")
      	public String ex04(SampleDTO dto , @ModelAttribute("page")int page) {
      		log.info("dto : "+dto);
@@ -316,7 +316,7 @@
      
              System.out.println("ex05");
      
-         }
+         } //ex05.jsp
      ```
 
 2. String 타입
@@ -330,18 +330,18 @@
 
    - ```java
      	@RequestMapping(value = "/", method = RequestMethod.GET)
-     	public String home(Locale locale, Model model) {
-     		logger.info("Welcome home! The client locale is {}.", locale);
-     		
-     		Date date = new Date();
-     		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-     		
-     		String formattedDate = dateFormat.format(date);
-     		
-     		model.addAttribute("serverTime", formattedDate );
-     		
-     		return "home";
-     	}
+       	public String home(Locale locale, Model model) {
+       		logger.info("Welcome home! The client locale is {}.", locale);
+       		
+       		Date date = new Date();
+       		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+       		
+       		String formattedDate = dateFormat.format(date);
+       		
+       		model.addAttribute("serverTime", formattedDate );
+       		
+       		return "home"; //home.jsp
+       	}
      ```
 
 3. 객체 타입
@@ -352,15 +352,15 @@
 
    - ```java
      	@GetMapping("/ex06")
-     	public @ResponseBody SampleDTO ex06() {
-     		log.info("/ex06........");
-     		
-     		SampleDTO dto = new SampleDTO();
-     		dto.setAge(10);
-     		dto.setName("홍길동");
-     		
-     		return dto;
-     	}
+       	public @ResponseBody SampleDTO ex06() {
+       		log.info("/ex06........");
+       		
+       		SampleDTO dto = new SampleDTO();
+       		dto.setAge(10);
+       		dto.setName("홍길동");
+       		
+       		return dto;
+       	}
      ```
 
 4. ResponseEntity 타입
@@ -369,16 +369,16 @@
 
    - ```JAVA
      	@GetMapping("/ex07")
-     	public ResponseEntity<String> ex07(){
-     		log.info("/ex07...............");
-     		
-     		String msg = "{\"name\":\"홍길동\"}";
-     		
-     		HttpHeaders header = new HttpHeaders();
-     		header.add("Content-Type", "application/json;charset=UTF-8");
-     		
-     		return new ResponseEntity<String>(msg, header, HttpStatus.OK);
-     	}
+       	public ResponseEntity<String> ex07(){
+       		log.info("/ex07...............");
+       		
+       		String msg = "{\"name\":\"홍길동\"}";
+       		
+       		HttpHeaders header = new HttpHeaders();
+       		header.add("Content-Type", "application/json;charset=UTF-8");
+       		
+       		return new ResponseEntity<String>(msg, header, HttpStatus.OK);
+       	}
      ```
 
 5. 파일업로드
@@ -459,7 +459,7 @@
 1. @ControllerAdvice
 
    - AOP를 이용하는 방식
-     핵심적인 로직은 아니지만 프로그램에서 필요한 공통적인 관심사는 분리하는 개념
+     **핵심적인 로직은 아니지만 프로그램에서 필요한 공통적인 관심사는 분리하는 개념**
 
    - < component-scan >을 통해서 해당 패키지의 내용을 조사하도록 해야함
 
@@ -469,9 +469,9 @@
 
      
 
-   - @ControllerAdvice : 해당 객체가 스프링의 컨트롤러에서 발생하는 예외를 처리하는 존재
+   - **@ControllerAdvice : 해당 객체가 스프링의 컨트롤러에서 발생하는 예외를 처리하는 존재**
 
-   - @ExceptionHandler : 해당 메서드가 () 에 들어가는 예외 타입을 처리함
+   - **@ExceptionHandler : 해당 메서드가 () 에 들어가는 예외 타입을 처리함**
 
    - ```java
      package org.zerock.exception;
@@ -485,11 +485,11 @@
      
      import lombok.extern.log4j.Log4j;
      
-     @ControllerAdvice
+     @ControllerAdvice // 예외를 처리하는 객체
      @Log4j
      public class CommonExceptionAdvice {
      	
-     	@ExceptionHandler(Exception.class)
+     	@ExceptionHandler(Exception.class) // 해당 예외를 처리함
      	public String except(Exception ex,Model model) {
      		log.error("Exception....."+ex.getMessage());
      		model.addAttribute("exception", ex); //model에 저장
@@ -556,13 +556,13 @@
      		log.error("Exception....."+ex.getMessage());
      		model.addAttribute("exception", ex);
      		log.error(model);
-     		return "error_page";
+     		return "error_page"; 
      	}
      	
      	@ExceptionHandler(NoHandlerFoundException.class)
-     	@ResponseStatus(HttpStatus.NOT_FOUND)
+     	@ResponseStatus(HttpStatus.NOT_FOUND) //exception이 발생했을 때  Response Status Code로 반환
      	public String handle404(NoHandlerFoundException ex) {
-     		return "custom404";
+     		return "custom404"; //custom5404.jsp로 이동
      	}
      }
      

@@ -30,6 +30,7 @@
   	<name>ex02</name>
   	<packaging>war</packaging>
   	<version>1.0.0-BUILD-SNAPSHOT</version>
+      <!--자바 버전과 스프링버전 수정-->
   	<properties>
   		<java-version>1.8</java-version>
   		<org.springframework-version>5.0.7.RELEASE</org.springframework-version>
@@ -111,7 +112,8 @@
   			<artifactId>javax.inject</artifactId>
   			<version>1</version>
   		</dependency>
-  
+  			
+          <!--서블릿 버전 수정-->
   		<!-- Servlet -->
   		<dependency>
   			<groupId>javax.servlet</groupId>
@@ -173,7 +175,10 @@
   			<version>1.18.0</version>
   			<scope>provided</scope>
   		</dependency>
+          <!-- 추가 끝-->
+          
   		<!-- Test -->
+          <!--junit 버전 수정-->
   		<dependency>
   			<groupId>junit</groupId>
   			<artifactId>junit</artifactId>
@@ -202,6 +207,7 @@
   				<artifactId>maven-compiler-plugin</artifactId>
   				<version>2.5.1</version>
   				<configuration>
+                      <!--Maven관련 자바 버전 수정-->
   					<source>1.8</source>
   					<target>1.8</target>
   					<compilerArgument>-Xlint:all</compilerArgument>
@@ -237,33 +243,35 @@
       updatedate date default sysdate
   );
   
+  alter table tbl_board add constraint pk_board primary key(bno);
+  
   insert into tbl_board (bno, title, content, writer) values (seq_board.nextval, '테스트 제목', '테스트 내용', 'user00');
   ```
 
 - 데이터베이스 관련 설정 및 테스트
 
-  - mybatis-spring 네임스페이스를 추가
+  - root-context.xml에 mybatis-spring 네임스페이스를 추가
 
   - DataSource의 설정과 Mybatis 설정을 추가
 
   - ```xml
     	<!-- Root Context: defines shared resources visible to all other web components -->
-    	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
-    		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"/>
-    		<property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:XE"/>
-    		<property name="username" value="book_ex"></property>
-    		<property name="password" value="book_ex"></property>
-    	</bean>
-    	
-    	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
-    		<constructor-arg ref="hikariConfig"></constructor-arg>
-    	</bean>
-    	
-    	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-    			<property name="dataSource" ref="dataSource"></property>
-    	</bean>
-    	
-    	<mybatis-spring:scan base-package="org.zerock.mapper"/>
+      	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+      		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"/>
+      		<property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:XE"/>
+      		<property name="username" value="book_ex"></property>
+      		<property name="password" value="book_ex"></property>
+      	</bean>
+      	
+      	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+      		<constructor-arg ref="hikariConfig"></constructor-arg>
+      	</bean>
+      	
+      	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+      			<property name="dataSource" ref="dataSource"></property>
+      	</bean>
+      	
+      	<mybatis-spring:scan base-package="org.zerock.mapper"/>
     ```
 
   - log4jdbc.log4j2.properties파일을 추가

@@ -73,10 +73,11 @@ public class SampleController {
 	}
 	
 	/*
-	 * @InitBinder public void initBinder(WebDataBinder binder) { SimpleDateFormat
-	 * dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	 * binder.registerCustomEditor(java.util.Date.class, new
-	 * CustomDateEditor(dateFormat, false)); }
+	 @InitBinder public void initBinder(WebDataBinder binder) { 
+		 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		 binder.registerCustomEditor(java.util.Date.class, new
+		 CustomDateEditor(dateFormat, false)); 
+	 }
 	 */
 	
 	@GetMapping("/ex03")
