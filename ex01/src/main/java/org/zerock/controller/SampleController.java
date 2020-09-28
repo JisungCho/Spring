@@ -35,7 +35,7 @@ public class SampleController {
 		log.info("basic...........");
 	}
 	
-	@RequestMapping("/basicOnlyGet")
+	@GetMapping("/basicOnlyGet")
 	public void basicGet2() {
 		log.info("basic get only get...........");
 	}
