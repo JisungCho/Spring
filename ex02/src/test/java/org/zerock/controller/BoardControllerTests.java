@@ -16,7 +16,7 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
+@WebAppConfiguration //Servlet의 ServletContext를 이용하기 위해서 설정
 @ContextConfiguration({
 	"file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml",
 	"file:src/main/webapp/WEB-INF/spring/root-context.xml"
@@ -44,6 +44,7 @@ public class BoardControllerTests {
 	}
 	
 	*/
+	/*
 	@Test
 	public void testListPaging() throws Exception{
 		log.info(
@@ -52,6 +53,7 @@ public class BoardControllerTests {
 				.param("amount","10"))
 				.andReturn().getModelAndView().getModelMap());
 	}
+	*/
 	/*
 	@Test
 	public void testRegister() throws Exception{

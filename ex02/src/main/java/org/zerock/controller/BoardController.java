@@ -44,7 +44,7 @@ public class BoardController {
 		
 		service.register(board);
 		
-		rttr.addFlashAttribute("result", board.getBno());
+		rttr.addFlashAttribute("result", board.getBno()); //일회성데이터
 		
 		return "redirect:/board/list";
 	}

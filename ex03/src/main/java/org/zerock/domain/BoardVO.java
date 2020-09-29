@@ -6,7 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
 
-@Data
+@Data //Getter , setter ,toString 등을 만듬
 public class BoardVO {
 	private Long bno;
 	private String title;

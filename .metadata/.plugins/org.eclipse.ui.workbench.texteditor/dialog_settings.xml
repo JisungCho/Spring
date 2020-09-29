@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="modalRe"/>
+		<item key="selection" value="get"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="get"/>
 			<item value="user pro"/>
 			<item value="modalre"/>
 			<item value="addre"/>
@@ -15,7 +16,6 @@
 			<item value="var modal"/>
 			<item value="form"/>
 			<item value=".."/>
-			<item value="customu"/>
 		</list>
 		<list key="replacehistory">
 			<item value="/resources"/>

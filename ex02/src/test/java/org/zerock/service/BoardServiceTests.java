@@ -61,7 +61,7 @@ public class BoardServiceTests {
 	public void testUpdate() {
 		BoardVO board = service.get(1L);
 		
-		if(board == null) {
+		if(board == null) {  
 			return;
 		}
 		

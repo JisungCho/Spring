@@ -37,13 +37,13 @@ public class BoardServiceImpl implements BoardService {
 	public boolean modify(BoardVO board) {
 		log.info("modify........");
 		
-		return mapper.update(board) == 1;
+		return mapper.update(board) == 1; //수정내역이 있음
 	}
 
 	@Override
 	public boolean remove(Long bno) {
 		log.info("remove......"+bno);
-		return mapper.delete(bno) == 1;
+		return mapper.delete(bno) == 1; //수정내역이 있음
 	}
 
 	@Override
