@@ -270,5 +270,248 @@
      </script>
      ```
 
+
+### 조회 페이지와 이동
+
+- 목록 페이지에서 링크를 통해서 GET 방식으로 특정한 번호의 게시물을 조회
+
+1. 조회 페이지 작성
+
+   - 게시물 번호를 출력
+   - 모든 데이터가 읽기 전용으로 처리
+
+   ```JAVA
+   	@GetMapping("/get")
+   	public void get(@RequestParam("bno") Long bno, Model model) {
+   		
+   		log.info("/get");
+   		model.addAttribute("board",service.get(bno));
+           //get.jsp로 board전달
+   	}
+   ```
+
+   - get.jsp
+
+   ```jsp
+   <div class="row">
+   	<div class="col-lg-12">
+   		<h1 class="page-header">Board Read</h1>
+   	</div>
+   	<!-- /.col-lg-12 -->
+   </div>
+   <!-- /.row -->
+   
+   <div class="row">
+   	<div class="col-lg-12">
+   		<div class="panel panel-default">
+   			<div class="panel-heading">Board Read Page</div>
+   			<!-- /.panel-heading -->
+   			<div class="panel-body">
+                   <!--모든 데이터는 읽기 전용-->
+   				<div class="form-group">
+   					<label>Bno</label><input class="form-control" name="bno" value='<c:out value='${board.bno }'/>' readonly="readonly">
+   				</div>
+   				<div class="form-group">
+   					<label>Title</label><input class="form-control" name="title" value='<c:out value='${board.title}'/>' readonly="readonly">
+   				</div>
+   				<div class="form-group">
+   					<label>Text Area</label>
+   					<textarea class="form-control" rows="3" name="content" readonly="readonly"><c:out value='${board.content}'/></textarea>
+   				</div>
+   				<div class="form-group">
+   					<label>Writer</label><input class="form-control" name="writer" value='<c:out value='${board.writer}'/>' readonly="readonly">
+   				</div>
+   				<button data-oper='modify' class="btn btn-default" onclick="location.href='/board/modify?bno=${board.bno}'">Modify</button>
+   				<button data-oper='list' class="btn btn-info" onclick="location.href='/board/list'">List</button>
+   			</div>
+   		</div>
+   	</div>
+   </div>
+   ```
+
+2. 목록 페이지와 뒤로 가기 문제
+
+   - 목록 페이지에서 각 게시물 제목에 a태그를 적용해서 조회 페이지로 이동하게 처리
+     - 만약 새창을 통해서 보고싶다면 a태그의 속성으로 target='_blank'를 지정
+
+   ```jsp
+   <tr>
+   								<td><c:out value="${board.bno }" /></td>
+   								<td><a href='/board/get?bno=<c:out value="${board.bno }"/>'><c:out value="${board.title }"></c:out></a></td>
+   								<td><c:out value="${board.writer }"></c:out></td>
+   								<td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate }" /></td>
+   								<td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.updateDate }" /></td>
+   							</tr>
+   ```
+
+   - 뒤로가기의 문제
+
+     - 등록 -> 목록 -> 조회에서 뒤로 가기 동작 시 다시 등록결과 확인창으로 이동
+     - 브라우저에서 뒤로가기나 앞으로가기를 하면 서버를 다시 호출하는 게 아니라 과거에 자신이 가진 모든 데이터를 활용하기 때문
+     - 이 문제를 해결하려면 window의 history 객체를 이용해서 현재 페이지는 모달창을 띄울 필요가 없다고 표시
+
+     ```js
+     var result = '<c:out value="${result}"/>'
+     		
+     		checkModal(result);
+     		
+     		history.replaceState({},null,null);
+     		
+     		function checkModal(result) {
+     			if(result === '' || history.state){
+     				return;
+     			}
+     			if(parseInt(result) > 0){
+     				$(".modal-body").html("게시글 "+parseInt(result)+"번이 등록되었습니다.");
+     			}
+     			
+     			$("#myModal").modal("show");
+     		}
+     		
+     		$('#regBtn').on("click",function(){
+     			self.location = "/board/register";
+     		});
+     ```
+
+### 게시물의 수정/삭제 처리
+
+- 수정/삭제의 방법
+  1. 조회 페이지에서 직접 처리
+  2. 별도의 수정/삭제 페이지를 만들어서 해당 페이지에서 수정과 삭제 처리 (추세)
+- 조회 페이지에서 GET방식으로 처리되는 URL을 통해서 수정/삭제 버튼이 존재하는 화면을 볼 수 있게 제작
+- 수정 혹은 삭제 작업은 POST방식으로 처리 , 결과는 목록화면에서 확인
+
+1. 수정/삭제 페이지로 이동
+
+   - BoardController
+
+     ```java
+     	@GetMapping({"/get","/modify"}) //URL을 배열로 처리해서 여러 URL을 처리하도록 설정
+     	public void get(@RequestParam("bno") Long bno, Model model) {
+     		
+     		log.info("/get or /modify");
+     		model.addAttribute("board",service.get(bno));
+     	}
+     ```
+
+   - modify.jsp
+
+     ```jsp
+     <form role="form" action="/board/modify" method="post">
+     					<div class="form-group">
+     						<label>Bno</label><input class="form-control" name="bno" value='<c:out value='${board.bno }'/>' readonly="readonly">
+     					</div>
+     					<div class="form-group">
+     						<label>Title</label><input class="form-control" name="title" value='<c:out value='${board.title}'/>'>
+     					</div>
+     					<div class="form-group">
+     						<label>Text Area</label>
+     						<textarea class="form-control" rows="3" name="content"><c:out value='${board.content}' /></textarea>
+     					</div>
+     					<div class="form-group">
+     						<label>Writer</label><input class="form-control" name="writer" value='<c:out value='${board.writer}'/>' readonly="readonly">
+     					</div>
+     					<div class="form-group">
+     						<label>RegDate</label> <input type="hidden" class="form-control" name='regDate' value='<fmt:formatDate pattern = "yyyy-MM-dd" value = "${board.regdate}" />' readonly="readonly">
+     					</div>
+     
+     					<div class="form-group">
+     						<label>Update Date</label> <input type="hidden" class="form-control" name='updateDate' value='<fmt:formatDate pattern = "yyyy-MM-dd" value = "${board.updateDate}" />' readonly="readonly">
+     					</div>
+     					<button type="submit" data-oper="modify" class="btn btn-default">Modify</button>
+     					<button type="submit" data-oper="remove" class="btn btn-danger">Remove</button>
+     					<button type="submit" data-oper="list" class="btn btn-info">List</button>
+     				</form>
+     ```
+
+     - 버튼에 따라서 다른 동작을 할 수 있도록 수정
+
+       ```javascript
+       <script type="text/javascript">
+       	$(document).ready(function(){
+       		var formObj = $("form"); //form태그
+       		
+       		$("button").on("click",function(e){ //버튼 클릭시
+       			e.preventDefault(); //이벤트 멈춤
+       			
+       			var operation = $(this).data("oper"); //눌린 버튼의 data-oper속성 읽어옴
+       			
+       			console.log(operation);
+       			
+       			if(operation === 'remove'){ // data-oper 속성이 remove이면
+       				formObj.attr("action","/board/remove"); //boardController의 /board/remove로 이동
+       			}else if(operation === 'list'){ // data-oper 속성이 list이면
+                       self.location = "/board/list";
+                       //boardController의 /board/list로 이동
+                       return;
+       			}
+       			formObj.submit();
+       		});
+       	});
+       </script>
+       ```
+
+2. 게시물 수정/삭제 확인
+
+3. 조회 페이지에서 < form > 처리
+
+   - 직접 버튼에 링크를 처리하는 방식을 사용하여 처리하였지만, 나중에 다양한 상황을 처리하기 위해서 < form > 태그를 이용해서 수정
+
+     - get.jsp
+
+       ```jsp
+       				<button data-oper='modify' class="btn btn-default">Modify</button>
+       				<button data-oper='list' class="btn btn-info">List</button>
+       				
+       				<form id='operForm' action="/board/modify" method="get">
+       					<input type="hidden" id="bno" name="bno" value='<c:out value="${board.bno }"></c:out>'>
+       				</form>
+       ```
+
+       ```javascript
+       	$(document).ready(function(){
+       		var operForm = $("#operForm"); 
+       		
+       		$("button[data-oper='modify']").on("click",function(e){ //modify버튼클릭
+       			operForm.attr("action","/board/modify").submit();// /board/modify이동
+       		});
+       		$("button[data-oper='list']").on("click",function(e){ //list버튼 클릭
+       			operForm.find('#bno').remove(); // list이동시 아무런 데이터 필요하지 않으므로 삭제
+       			operForm.attr("action","/board/list"); // /board/list 이동
+       			operForm.submit();
+       		});
+       	});
+       ```
+
+4. 수정 페이지에서 링크 처리
+
+   - modify.jsp
+
+     ```javascript
+     <script type="text/javascript">
+     	$(document).ready(function(){
+     		var formObj = $("form");
+     		
+     		$("button").on("click",function(e){
+     			e.preventDefault();
+     			
+     			var operation = $(this).data("oper");
+     			
+     			console.log(operation);
+     			
+     			if(operation === 'remove'){
+     				formObj.attr("action","/board/remove");
+     			}else if(operation === 'list'){
+                     //버튼이 List인 경우 action속성과 method 속성을 변경
+     				formObj.attr("action","/board/list").attr("method","get");
+     				//list로 이동시 아무런 파라미터도 필요없기 떄문에 form의 내용 전부 삭제
+     				formObj.empty();
+     			}
+     			formObj.submit();
+     		});
+     	});
+     </script>
+     ```
+
      
 
