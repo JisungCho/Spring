@@ -29,7 +29,7 @@
      select * from 
      (
      	select /*+INDEX_DESC(tbl_board pk_board) */
-     	rownum rn,bno,title,content,writer,regdate,update
+     	rownum rn,bno,title,content,writer,regdate,updatedate
      	from tbl_board
      	where title like '%Test%' or content like '%Test%' and rownum <= 20
      )
@@ -45,7 +45,7 @@
      select * from 
      (
      	select /*+INDEX_DESC(tbl_board pk_board) */
-     	rownum rn,bno,title,content,writer,regdate,update
+     	rownum rn,bno,title,content,writer,regdate,updatedate
      	from tbl_board
      	where ( title like '%Test%' or content like '%Test%' ) and rownum <= 20
      )

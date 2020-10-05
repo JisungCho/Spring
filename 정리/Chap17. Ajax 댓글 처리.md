@@ -424,16 +424,17 @@
 3. 특정 게시물의 댓글 목록 확인
 
    ```JAVA
-   	@GetMapping(value = "/pages/{bno}/{page}" , produces = {
-   				MediaType.APPLICATION_XML_VALUE,
-   				MediaType.APPLICATION_JSON_UTF8_VALUE}) //XML , JSON데이터로 반환
-   	public ResponseEntity<ReplyPageDTO> getList(@PathVariable("page") int page,
-   												 @PathVariable("bno") Long bno){
-   		log.info("getList.........");
-   		Criteria cri = new Criteria(page, 10); // 해당 페이지번호와 페이지당 10개의 데이터를 보여줌
+   @GetMapping(value="/pages/{bno}/{page}", produces= {
+   			MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE
+   	})
+   	public ResponseEntity<List<ReplyVO>> getList(
+   			@PathVariable("page") int page,
+   			@PathVariable("bno") Long bno
+   			) {
+   		log.info("getList...............");
+   		Criteria cri = new Criteria(page, 10);
    		log.info(cri);
-   		
-   		return new ResponseEntity<ReplyPageDTO>(service.getListPage(cri, bno),HttpStatus.OK);
+   		return new ResponseEntity<>(service.getList(cri, bno), HttpStatus.OK);
    	}
    ```
 
