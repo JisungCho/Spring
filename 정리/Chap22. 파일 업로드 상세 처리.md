@@ -365,6 +365,7 @@
         		
         		String uploadFolder = "C:\\upload";
         		
+                String uploadFolderPath = getFolder();
         		
         		//make folder
         		File uploadPath = new File(uploadFolder, getFolder());
@@ -419,12 +420,12 @@
         		}
                 return new ResponseEntity<>(list, HttpStatus.OK);
         	}
-        ```
-
-   2. 브라우저에서 Ajax처리
-
-      - uploadAjax.jsp
-
+     ```
+   
+2. 브라우저에서 Ajax처리
+   
+   - uploadAjax.jsp
+   
         ```js
         		$.ajax({
         					url : '/uploadAjaxAction',
@@ -439,8 +440,8 @@
         						$(".uploadDiv").html(cloneObj.html());
         					}
         				});
-        ```
-
-        
-
+     ```
+   
+     
+   
    
