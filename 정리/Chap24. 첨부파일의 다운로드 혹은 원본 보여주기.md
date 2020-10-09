@@ -97,7 +97,8 @@
        			String downloadName = null;
        			if(userAgent.contains("Trident")) { //IE일때
        				log.info("IE browser");
-       				downloadName = URLEncoder.encode(resourceName,"UTF-8").replaceAll("\\", " ");
+       				downloadName = URLEncoder.encode(resourceName,"UTF-8").replaceAll("\\+", " ");
+                       //띄어쓰기 제거
        			
        			}else if(userAgent.contains("Edge")) { //edge일때
        				log.info("Edge browser");
@@ -116,14 +117,14 @@
                return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
        	}
        
-       ```
-
-  2. 업로드 된 후 다운로드 처리
-
-     - /uploadAjax 화면에서 업로드된 후 파일 이미지를 클릭한 경우에 다운로드가 될 수 있도록 처리
-
-     - uploadAjax.jsp
-
+     ```
+  
+2. 업로드 된 후 다운로드 처리
+  
+   - /uploadAjax 화면에서 업로드된 후 파일 이미지를 클릭한 경우에 다운로드가 될 수 있도록 처리
+  
+   - uploadAjax.jsp
+  
        ```js
        $(document).ready(function() {
        			
@@ -135,6 +136,8 @@
        				$(uploadResultArr).each(
        					function(i,obj) {
        						if(!obj.image){
+                                   //fileCallPath는 url로 처리되기때문에 호환성을 위해 인코딩해줌
+                                   //< li > 를 클릭하면 /download?fileName으로이동
        							var fileCallPath = encodeURIComponent(obj.uploadPath+"/"+obj.uuid+"_"+obj.fileName);
        							str += "<li><div><a href='/download?fileName="+fileCallPath+"'>"+"<img src='/resources/img/attach.png'>"+obj.fileName+"</a></li>";
        						}else{
@@ -144,14 +147,14 @@
        							str += "<li><img src='/display?fileName="+fileCallPath+"'></li>";
        						}
        					});
-       				uploadResult.append(str);
-       			}
-       ```
-
-     - UploadController
-
+     				uploadResult.append(str);
+    			}
+     ```
+  
+   - UploadController
+  
        - uuid가 붙은 부분을 제거하고 순수하게 다운로드되는 파일의 이름으로 저장
-
+     
          ```java
          @GetMapping(value = "/download" , produces = MediaType.APPLICATION_OCTET_STREAM_VALUE) //다운로드 MIME타입
          	@ResponseBody
@@ -176,16 +179,16 @@
          			String downloadName = null;
          			if(userAgent.contains("Trident")) { //IE일때
          				log.info("IE browser");
-         				downloadName = URLEncoder.encode(resourceName,"UTF-8").replaceAll("\\", " ");
+         				downloadName = URLEncoder.encode(resourceOriginalName,"UTF-8").replaceAll("\\", " ");
          			
          			}else if(userAgent.contains("Edge")) { //edge일때
          				log.info("Edge browser");
-         				downloadName = URLEncoder.encode(resourceName, "UTF-8");
-         				log.info("Edge name: "+downloadName);
+         				downloadName = URLEncoder.encode(resourceOriginalName, "UTF-8");
+         				
          
          			}else { //크롬일때
          				log.info("Chrome browser");
-         				downloadName = new String(resourceName.getBytes("UTF-8"),"ISO-8859-1");
+         				downloadName = new String(resourceOriginalName.getBytes("UTF-8"),"ISO-8859-1");
          			}
          			
          			headers.add("Content-Disposition", "attachment; filename="+downloadName);
@@ -197,8 +200,6 @@
          
          ```
 
-### 
-
 ### 원본 이미지 보여주기
 
 - 섬네일의 이미지가 '업로드된 경로+/s+UUID+파일이름' 에서 /s가 / 로 변경되는 점이다르다
@@ -209,7 +210,7 @@
    - uploadAjax
 
    ```js
-   	function showImage(fileCallPath) {
+   	function showImage(fileCallPath) { //$(document).ready(function()밖에 설정
    		alert(fileCallPath);
    	}
    
@@ -235,10 +236,11 @@
    							//str += "<li>"+obj.fileName+"</li>";
    							var fileCallPath = encodeURIComponent(obj.uploadPath+"/s_"+obj.uuid+"_"+obj.fileName);
    							
-                               var originPath = obj.uploadPath+"\\"+obj.uuid+"_"+obj.fileName;
+                               var originPath = obj.uploadPath+"\\"+obj.uuid+"_"+obj.fileName; //원본이미지, url로 보내는게 아니니까 인코딩 안해도됨
    							
    							originPath = originPath.replace(new RegExp(/\\/g), "/"); 
    							
+                               //자바스크립트의 showImage()함수 호출
    							str += "<li><a href=\"javascript:showImage(\'"+originPath+"\')\"><img src='/display?fileName="+fileCallPath+"'></a></li>"
    						}
    					});
@@ -348,7 +350,7 @@
 
   - uploadAjax.jsp
 
-    ```
+    ```js
     		$(document).ready(function() {
     			
     			var uploadResult = $(".uploadResult ul");
@@ -384,8 +386,10 @@
     
     ```
 
-  - x표시에 대한 이벤트
+    
 
+  - x표시에 대한 이벤트
+  
     ```js
     $(".uploadResult").on("click","span",function(e){
     				var targetFile = $(this).data("file"); //data-file속성
@@ -406,17 +410,17 @@
     					}
     				});
     			})
-    		});
+  		});
     ```
 
   - 서버에서 첨부파일의 삭제
-
+  
     ```java
     	@PostMapping("/deleteFile")
     	@ResponseBody
     	public ResponseEntity<String> deleteFile(String fileName,String type){
     		log.info("deleteFile:"+fileName);
-    		
+    		//2020%5C10%5C08%2Fs_74567ba9-fb55-4062-805d-f370256e3717_20190928194237995671.jpg
     		File file;
     		
     		try {
@@ -438,9 +442,9 @@
     			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     		}
     		return new ResponseEntity<String>("deleted",HttpStatus.OK);
-    	}
+  	}
     ```
 
     
-
+  
   
