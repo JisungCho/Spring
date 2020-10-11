@@ -469,6 +469,52 @@
   
   ```
 
+- security-context.xml
+
+  ```xml
+  <?xml version="1.0" encoding="UTF-8"?>
+  <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  	xmlns:security="http://www.springframework.org/schema/security"
+  	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+  		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+  		
+  	<bean id="customAccessDenied" class="org.zerock.security.CustomAccessDeniedHandler"></bean>
+  	<bean id="customLoginSuccess" class="org.zerock.security.CustomLoginSuccessHandler"></bean> 
+  	
+  	<security:http>
+          
+          <!--인터셉터를 이용해서 접근을 제한-->
+  		<security:intercept-url pattern="/sample/all" access="permitAll" /> <!--pattern : uri의 패턴, access : 권한을 체크하는데 access안에 문자열에는 표현식이 사용될 수도 있고 권한명을 사용할 수도있지만 표현식을 사용하는 방식이 권장--> 
+  		<security:intercept-url pattern="/sample/member" access="hasRole('ROLE_MEMBER')" /> <!--ROLE_MEMBER권한을 가진회원-->
+  		<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')" /> <!--ROLE_ADMIN권한을 가진회원-->
+          
+          <!--login-page 속성의 uri는 반드시 GET방식으로 접근하는 URI를 지정-->
+  		<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess"/>
+        
+          <!--AccessDeniedHandler를 구현한 클래스를 ref로 사용-->
+         	<security:access-denied-handler ref="customAccessDeniedHandler" />
+          
+          
+  	</security:http>
+  
+  	<security:authentication-manager>
+  		
+          <security:authentication-provider>
+          	<security:user-service>
+              	<security:user name="member" password="{noop}member" authorities="ROLE_MEMBER"/>
+                  <security:user name="admin" password="{noop}admin" authorities="ROLE_MEMBER, ROLE_ADMIN"/>
+              </security:user-service>
+          </security:authentication-provider>
+          
+  	</security:authentication-manager>
+  </beans>
+  
+  ```
+
+  
+
+
+
 ### 로그아웃의 처리와 LogoutSuccessHandler
 
 - 로그아웃 처리 방식
